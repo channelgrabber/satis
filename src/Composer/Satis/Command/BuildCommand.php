@@ -429,17 +429,31 @@ EOT
     private function dumpPackageIncludeJson(array $packages, OutputInterface $output, $filename)
     {
         $repo = array('packages' => array());
+        $repositories = json_decode(file_get_contents($this->getRepositoryJsonFile()), true);
         $dumper = new ArrayDumper;
         foreach ($packages as $package) {
             $repo['packages'][$package->getPrettyName()][$package->getPrettyVersion()] = $dumper->dump($package);
+            foreach ($repositories['repositories'] as $repository) {
+                if ($repo['packages'][$package->getPrettyName()][$package->getPrettyVersion()]['source']['url'] == $repository['url']) {
+                        $repo['packages'][$package->getPrettyName()][$package->getPrettyVersion()]['source']['url'] = $repository['repository'];
+                        break;
+                }
+            }
         }
         $repoJson = new JsonFile($filename);
         $repoJson->write($repo);
         $hash = hash_file('sha1', $filename);
+
         $filenameWithHash = $filename.'$'.$hash.'.json';
         rename($filename, $filenameWithHash);
+
         $output->writeln("<info>wrote packages json $filenameWithHash</info>");
         return $filenameWithHash;
+    }
+
+    private function getRepositoryJsonFile()
+    {
+        return '/var/www/satis/satis.json';
     }
     
     private function dumpPackagesJson($includes, OutputInterface $output, $filename){
