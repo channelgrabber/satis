@@ -1,7 +1,10 @@
+/.composer
 /.settings
 /.project
 /.idea
 /.buildpath
+/public
+/satis.json
 /vendor
 phpunit.xml
 composer.phar
