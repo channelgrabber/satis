@@ -12,9 +12,9 @@
 namespace Composer\Satis\Console;
 
 use Composer\Composer;
-use Composer\Factory;
 use Composer\IO\ConsoleIO;
 use Composer\Satis\Command;
+use Composer\Satis\Factory;
 use Composer\Satis\Satis;
 use Composer\Util\ErrorHandler;
 use Symfony\Component\Console\Application as BaseApplication;
